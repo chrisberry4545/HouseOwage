@@ -1,0 +1,40 @@
+﻿@model HouseOwage.Models.PaymentRequest
+@{
+    ViewBag.Title = "Create Request";
+    ViewBag.InputClass = "form-control";
+}
+
+<div class="row">
+    <h1>Create Payment Request</h1>
+</div>
+
+<div class="row">
+
+    @using (Html.BeginForm("Create", "PaymentRequest", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Name)
+            @Html.TextBoxFor(m => m.Name, new { @class = ViewBag.InputClass, placeholder = "What is the request for?" })
+        </div>
+
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.Amount)
+            @Html.TextBoxFor(m => m.Amount, new { @class = ViewBag.InputClass, type = "number" })
+            @Html.ValidationMessageFor(m => m.Amount)
+        </div>
+
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.SentTo)
+            @Html.DropDownListFor(m => m.SentTo.UserId, (IEnumerable<SelectListItem>)ViewBag.AllUsers, new { @class = ViewBag.InputClass })
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Create Request</button>
+        </div>
+
+    }
+
+</div>

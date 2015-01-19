@@ -1,0 +1,120 @@
+﻿@model HouseOwage.ViewModels.MyDashboardViewModel
+@{
+    ViewBag.Title = "My Dashboard";
+}
+
+@if (Model.PaymentsRequiringConfirmation != null && Model.PaymentsRequiringConfirmation.Count() > 0)
+{
+    <h1>Confirm Receipt of Payments</h1>
+
+    <table class="table table-striped">
+        <tr>
+            <th>User</th>
+            <th>Paid you</th>
+            <th>For</th>
+            <th>Confirm Payment</th>
+        </tr>
+        @foreach (var payment in Model.PaymentsRequiringConfirmation)
+        {
+            <tr>
+                <td>@payment.PaymentMadeBy</td>
+                <td>@payment.AmountPaid</td>
+                <td>@payment.PaymentRequestName</td>
+                <td>
+                    @using (Html.BeginForm("ConfirmPayment", "Payment", FormMethod.Post))
+                    {
+                        @Html.Hidden("paymentId", payment.PaymentId)
+                        <button type="submit" class="btn btn-success">
+                            <i class="glyphicon glyphicon-ok"></i>
+                        </button>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+
+<h1>Money I owe</h1>
+@if (Model.RequestsSentToMeAndUnpaid != null && Model.RequestsSentToMeAndUnpaid.Count() > 0)
+{
+    <table class="table table-striped">
+        <tr>
+            <th>Owed For</th>
+            <th>Amount left to pay</th>
+            <th>Owed to</th>
+            <th>Pay</th>
+        </tr>
+        @foreach (var paymentRequest in Model.RequestsSentToMeAndUnpaid)
+        {
+            <tr>
+                <td>@paymentRequest.RequestName</td>
+                <td>£@paymentRequest.AmountLeftToPay</td>
+                <td>@paymentRequest.RequestFrom</td>
+                <td>
+                    @using (Html.BeginForm("New", "Payment", FormMethod.Post))
+                    {
+                        @Html.Hidden("requestId", paymentRequest.PaymentRequestId)
+                        <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon glyphicon-transfer"></i></button>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <span>You have no overdue payments</span>
+}
+
+<h1>Money I'm owed</h1>
+@if (Model.MyUnresolvedRequests != null && Model.MyUnresolvedRequests.Count() > 0)
+{
+    <table class="table table-striped">
+        <tr>
+            <th>Owed for</th>
+            <th>Amount left to pay</th>
+            <th>Request made to</th>
+        </tr>
+        @foreach (var paymentRequest in Model.MyUnresolvedRequests)
+        {
+            <tr>
+                <td>@paymentRequest.RequestName</td>
+                <td>@paymentRequest.AmountLeftToPay</td>
+                <td>@paymentRequest.RequestMadeTo</td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <span>You don't have any outstanding requests</span>
+}
+@using (Html.BeginForm("Create", "PaymentRequest", FormMethod.Get))
+{
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Add Request</button>
+    </div>
+}
+
+    @if (Model.MyUnconfirmedPayments != null && Model.MyUnconfirmedPayments.Count() > 0)
+    {
+        <h1>My Unconfirmed Payments</h1>
+    <table class="table table-striped">
+        <tr>
+            <th>Paid to</th>
+            <th>Amount</th>
+            <th>Paid for</th>
+        </tr>
+
+        @foreach (var unconfirmedPayment in Model.MyUnconfirmedPayments)
+        {
+            <tr>
+                <td>@unconfirmedPayment.PaymentMadeTo</td>
+                <td>@unconfirmedPayment.AmountPaid</td>
+                <td>@unconfirmedPayment.PaymentRequestName</td>
+            </tr>
+        }
+
+    </table>
+    }
