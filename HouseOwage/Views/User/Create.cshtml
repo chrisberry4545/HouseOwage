@@ -1,0 +1,44 @@
+﻿@model HouseOwage.Models.User
+@{
+    ViewBag.Title = "Create User";
+    ViewBag.InputClass = "form-control";
+}
+
+<div class="row">
+    <h1>Create User</h1>
+</div>
+
+<div class="row">
+
+    @using (Html.BeginForm("Create", "User", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.UserName)
+            @Html.TextBoxFor(m => m.UserName, new { @class = ViewBag.InputClass })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Password)
+            @Html.TextBoxFor(m => m.Password, new { @class = ViewBag.InputClass })
+        </div>
+
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.Name)
+            @Html.TextBoxFor(m => m.Name, new { @class = ViewBag.InputClass })
+        </div>
+
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.Admin)
+            @Html.CheckBoxFor(m => m.Admin, new { @class = ViewBag.InputClass })
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Create User</button>
+        </div>
+
+    }
+
+</div>

@@ -16,7 +16,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/14/2015 14:58:23</publishTime>
     </File>
     <File Include="bin/HouseOwage.dll">
-      <publishTime>01/18/2015 23:16:15</publishTime>
+      <publishTime>01/19/2015 22:17:51</publishTime>
     </File>
     <File Include="bin/Microsoft.Web.Infrastructure.dll">
       <publishTime>01/14/2015 14:48:19</publishTime>
@@ -109,13 +109,19 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/18/2015 17:16:17</publishTime>
     </File>
     <File Include="Views/Payment/Create.cshtml">
-      <publishTime>01/18/2015 14:41:41</publishTime>
+      <publishTime>01/19/2015 19:34:58</publishTime>
     </File>
     <File Include="Views/PaymentRequest/Create.cshtml">
-      <publishTime>01/18/2015 23:21:43</publishTime>
+      <publishTime>01/19/2015 19:35:01</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>01/18/2015 14:35:23</publishTime>
+      <publishTime>01/19/2015 21:26:14</publishTime>
+    </File>
+    <File Include="Views/User/ChangePassword.cshtml">
+      <publishTime>01/19/2015 22:14:54</publishTime>
+    </File>
+    <File Include="Views/User/Create.cshtml">
+      <publishTime>01/19/2015 21:35:24</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>01/14/2015 14:48:16</publishTime>

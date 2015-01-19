@@ -121,6 +121,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\PaymentRequestController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -135,6 +136,14 @@
     <Compile Include="Migrations\201501181150133_AddPaymentName.Designer.cs">
       <DependentUpon>201501181150133_AddPaymentName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201501192121399_AddUserAdmin.cs" />
+    <Compile Include="Migrations\201501192121399_AddUserAdmin.Designer.cs">
+      <DependentUpon>201501192121399_AddUserAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201501192123101_AddUserSalt.cs" />
+    <Compile Include="Migrations\201501192123101_AddUserSalt.Designer.cs">
+      <DependentUpon>201501192123101_AddUserSalt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Payment.cs" />
     <Compile Include="Models\PaymentRequest.cs" />
@@ -143,6 +152,7 @@
     <Compile Include="ViewModels\MyDashboardViewModel.cs" />
     <Compile Include="ViewModels\PaymentRequestViewModel.cs" />
     <Compile Include="ViewModels\PaymentViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -200,6 +210,12 @@
     <EmbeddedResource Include="Migrations\201501181150133_AddPaymentName.resx">
       <DependentUpon>201501181150133_AddPaymentName.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501192121399_AddUserAdmin.resx">
+      <DependentUpon>201501192121399_AddUserAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501192123101_AddUserSalt.resx">
+      <DependentUpon>201501192123101_AddUserSalt.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\bootstrap-theme.css.map" />
@@ -210,6 +226,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\File Publish.pubxml" />
+    <Content Include="Views\User\ChangePassword.cshtml" />
+    <Content Include="Views\User\Create.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

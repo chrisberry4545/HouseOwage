@@ -12,6 +12,8 @@ namespace HouseOwage.Models
         public String Name { get; set; }
         public String UserName { get; set; }
         public String Password { get; set; }
+        public bool Admin { get; set; }
+        public String Salt { get; set; }
 
         public virtual IEnumerable<PaymentRequest> MyRequests { get; set; }
         public virtual IEnumerable<Payment> MyPayments { get; set; }

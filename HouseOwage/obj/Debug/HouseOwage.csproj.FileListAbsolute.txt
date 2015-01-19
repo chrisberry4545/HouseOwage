@@ -33,3 +33,5 @@ C:\Users\Chris\Documents\Visual Studio 2013\Projects\HouseOwage\HouseOwage\bin\S
 C:\Users\Chris\Documents\Visual Studio 2013\Projects\HouseOwage\HouseOwage\bin\System.Net.Http.Formatting.xml
 C:\Users\Chris\Documents\Visual Studio 2013\Projects\HouseOwage\HouseOwage\bin\System.Web.Http.xml
 C:\Users\Chris\Documents\Visual Studio 2013\Projects\HouseOwage\HouseOwage\bin\System.Web.Http.WebHost.xml
+C:\Users\Chris\documents\visual studio 2013\Projects\HouseOwage\HouseOwage\obj\Debug\HouseOwage.Migrations.AddUserAdmin.resources
+C:\Users\Chris\documents\visual studio 2013\Projects\HouseOwage\HouseOwage\obj\Debug\HouseOwage.Migrations.AddUserSalt.resources

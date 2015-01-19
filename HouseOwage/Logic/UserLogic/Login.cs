@@ -120,8 +120,13 @@ namespace HouseOwage.Logic.UserLogic
         {
             using (var db = new HouseOwageContext())
             {
-                var user = db.Users.FirstOrDefault(u => u.UserName.ToUpper().Equals(username.ToUpper()) && u.Password.Equals(password));
-                return user;
+                var user = db.Users.FirstOrDefault(u => u.UserName.ToUpper().Equals(username.ToUpper()));
+                //Check password is ok.
+                if (user != null && UserLogic.Passwords.ComparePasswords(user.Password, password))
+                {
+                    return user;
+                }
+                return null;
             }
         }
 
