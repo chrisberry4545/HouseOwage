@@ -60,6 +60,12 @@
                 </td>
             </tr>
         }
+        <tr>
+            <td>Total:</td>
+            <td>£@Model.RequestsSentToMeAndUnpaid.Sum(p => p.AmountLeftToPay)</td>
+            <td></td>
+            <td></td>
+        </tr>
     </table>
 }
 else
@@ -84,6 +90,12 @@ else
                 <td>@paymentRequest.RequestMadeTo</td>
             </tr>
         }
+        <tr>
+            <td>Total:</td>
+            <td>£@Model.MyUnresolvedRequests.Sum(p => p.AmountLeftToPay)</td>
+            <td></td>
+            <td></td>
+        </tr>
     </table>
 }
 else

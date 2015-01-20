@@ -34,3 +34,4 @@ C:\Users\Chris\documents\visual studio 2013\Projects\HouseOwage\HouseOwage\obj\R
 C:\Users\Chris\documents\visual studio 2013\Projects\HouseOwage\HouseOwage\obj\Release\HouseOwage.csproj.GenerateResource.Cache
 C:\Users\Chris\documents\visual studio 2013\Projects\HouseOwage\HouseOwage\obj\Release\HouseOwage.dll
 C:\Users\Chris\documents\visual studio 2013\Projects\HouseOwage\HouseOwage\obj\Release\HouseOwage.pdb
+C:\Users\Chris\Documents\Visual Studio 2013\Projects\HouseOwage\HouseOwage\obj\Release\HouseOwage.csprojResolveAssemblyReference.cache
