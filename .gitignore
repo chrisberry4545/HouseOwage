@@ -45,3 +45,4 @@ Temporary Items
 bin/
 obj/
 .suo
+App_Data/
