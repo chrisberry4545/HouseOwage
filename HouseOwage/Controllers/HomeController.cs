@@ -38,7 +38,12 @@ namespace HouseOwage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult MyDashboard([Bind(Include = "UserName,Password")]User user)
         {
-            var userLoggedIn = Logic.UserLogic.Login.LoginUser(user.UserName, user.Password);
+            var userLoggedIn = (User)Session[UserSession];
+
+            if (userLoggedIn == null)
+            {
+                userLoggedIn = Logic.UserLogic.Login.LoginUser(user.UserName, user.Password);
+            }
 
             if (userLoggedIn != null)
             {

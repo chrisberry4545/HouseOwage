@@ -144,6 +144,14 @@
     <Compile Include="Migrations\201501192123101_AddUserSalt.Designer.cs">
       <DependentUpon>201501192123101_AddUserSalt.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201501222233334_PaymentRequestFK.cs" />
+    <Compile Include="Migrations\201501222233334_PaymentRequestFK.Designer.cs">
+      <DependentUpon>201501222233334_PaymentRequestFK.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201501222252244_PaymentRequestArchive.cs" />
+    <Compile Include="Migrations\201501222252244_PaymentRequestArchive.Designer.cs">
+      <DependentUpon>201501222252244_PaymentRequestArchive.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Payment.cs" />
     <Compile Include="Models\PaymentRequest.cs" />
@@ -216,6 +224,12 @@
     <EmbeddedResource Include="Migrations\201501192123101_AddUserSalt.resx">
       <DependentUpon>201501192123101_AddUserSalt.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501222233334_PaymentRequestFK.resx">
+      <DependentUpon>201501222233334_PaymentRequestFK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501222252244_PaymentRequestArchive.resx">
+      <DependentUpon>201501222252244_PaymentRequestArchive.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\bootstrap-theme.css.map" />
@@ -228,6 +242,7 @@
     <None Include="Properties\PublishProfiles\File Publish.pubxml" />
     <Content Include="Views\User\ChangePassword.cshtml" />
     <Content Include="Views\User\Create.cshtml" />
+    <Content Include="Views\PaymentRequest\Edit.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

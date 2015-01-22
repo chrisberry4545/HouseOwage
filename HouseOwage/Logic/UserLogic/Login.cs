@@ -28,7 +28,9 @@ namespace HouseOwage.Logic.UserLogic
                     .ToList();
 
                 //My requests
-                var myRequests = db.PaymentRequests.Include("SentTo").Where(r => r.CreatedBy.UserId == vm.UserDetails.UserId).ToList();
+                var myRequests = db.PaymentRequests.Include("SentTo")
+                    .Where(r => r.CreatedBy.UserId == vm.UserDetails.UserId
+                            && !r.Archived).ToList();
 
                 List<PaymentRequestViewModel> myUnresolvedRequests = new List<PaymentRequestViewModel>();
                 List<PaymentRequestViewModel> myResolvedRequests = new List<PaymentRequestViewModel>();
@@ -57,7 +59,9 @@ namespace HouseOwage.Logic.UserLogic
                 vm.MyResolvedRequests = myResolvedRequests;
 
                 //Requests made to me
-                var requestsMadeToMe = db.PaymentRequests.Include("CreatedBy").Where(r => r.SentTo.UserId == vm.UserDetails.UserId).ToList();
+                var requestsMadeToMe = db.PaymentRequests.Include("CreatedBy")
+                    .Where(r => r.SentTo.UserId == vm.UserDetails.UserId
+                    && !r.Archived).ToList();
 
                 List<PaymentRequestViewModel> requestsSentToMeAndPaid = new List<PaymentRequestViewModel>();
                 List<PaymentRequestViewModel> requestsSentToMeAndUnpaid = new List<PaymentRequestViewModel>();

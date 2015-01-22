@@ -1,0 +1,58 @@
+﻿@model HouseOwage.Models.PaymentRequest
+@{
+    ViewBag.Title = "Edit Request";
+    ViewBag.InputClass = "form-control";
+}
+
+<div class="row">
+    <h1>Edit Payment Request</h1>
+</div>
+
+<div class="row">
+
+    @using (Html.BeginForm("Edit", "PaymentRequest", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        
+        @Html.HiddenFor(m => m.PaymentRequestId)
+
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Name)
+            @Html.TextBoxFor(m => m.Name, new { @class = ViewBag.InputClass, placeholder = "What is the request for?" })
+        </div>
+
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.Amount)
+            @Html.TextBoxFor(m => m.Amount, new { @class = ViewBag.InputClass, type = "number", step = "any" })
+            @Html.ValidationMessageFor(m => m.Amount)
+        </div>
+
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.SentTo)
+            @Html.DropDownListFor(m => m.SentTo_UserId, (IEnumerable<SelectListItem>)ViewBag.AllUsers, new { @class = ViewBag.InputClass })
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Change Request</button>
+            <button style="float:right;" onclick="deletePaymentRequest()" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+        </div>
+
+    }
+
+</div>
+
+@using (Html.BeginForm("Delete", "PaymentRequest", FormMethod.Post, new { id = "deleteForm" }))
+{
+    @Html.Hidden("paymentRequestId", Model.PaymentRequestId)
+}
+
+
+<script>
+    function deletePaymentRequest() {
+        var r = confirm("Are you sure you want to delete this request?");
+        if (r == true) {
+            $('#deleteForm').submit();
+        }
+    }
+</script>

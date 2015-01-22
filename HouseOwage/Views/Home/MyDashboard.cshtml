@@ -81,13 +81,22 @@ else
             <th>Owed for</th>
             <th>Amount left to pay</th>
             <th>Request made to</th>
+            <th>Edit</th>
         </tr>
         @foreach (var paymentRequest in Model.MyUnresolvedRequests)
         {
             <tr>
                 <td>@paymentRequest.RequestName</td>
-                <td>@paymentRequest.AmountLeftToPay</td>
+                <td>£@paymentRequest.AmountLeftToPay</td>
                 <td>@paymentRequest.RequestMadeTo</td>
+                <td>
+                    @using (Html.BeginForm("Edit", "PaymentRequest", FormMethod.Get))
+                    {
+                        @Html.Hidden("paymentRequestId", paymentRequest.PaymentRequestId)
+                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button>
+                    }
+                </td>
+
             </tr>
         }
         <tr>
