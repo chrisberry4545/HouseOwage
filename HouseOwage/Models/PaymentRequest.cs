@@ -21,6 +21,8 @@ namespace HouseOwage.Models
 
         public bool Archived { get; set; }
 
+        public DateTime Created { get; set; }
+
         [ForeignKey("SentTo")]
         public int SentTo_UserId { get; set; }
         [Display(Name = "Send to")]

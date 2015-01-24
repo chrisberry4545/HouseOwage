@@ -17,6 +17,10 @@ namespace HouseOwage.Models
 
         public bool Confirmed { get; set; }
 
+        public bool Archived { get; set; }
+
+        public DateTime Created { get; set; }
+
         public virtual PaymentRequest PaymentRequest { get; set; }
     }
 }

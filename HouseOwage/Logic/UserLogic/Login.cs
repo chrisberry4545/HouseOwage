@@ -20,11 +20,13 @@ namespace HouseOwage.Logic.UserLogic
 
                 var myPayments = db.Payments
                     .Include("PaymentRequest")
-                    .Where(p => p.PaymentRequest.SentTo.UserId == vm.UserDetails.UserId)
+                    .Where(p => p.PaymentRequest.SentTo.UserId == vm.UserDetails.UserId
+                    && !p.Archived)
                     .ToList();
                 var confirmedPaymentsToMe = db.Payments
                     .Include("PaymentRequest")
-                    .Where(p => p.PaymentRequest.CreatedBy.UserId == vm.UserDetails.UserId && p.Confirmed)
+                    .Where(p => p.PaymentRequest.CreatedBy.UserId == vm.UserDetails.UserId && p.Confirmed
+                    && !p.Archived)
                     .ToList();
 
                 //My requests
@@ -45,7 +47,8 @@ namespace HouseOwage.Logic.UserLogic
                         AmountLeftToPay = amountLeftToPay,
                         RequestMadeTo = req.SentTo.Name,
                         RequestName = req.Name,
-                        RequestFrom = vm.UserDetails.Name
+                        RequestFrom = vm.UserDetails.Name,
+                        Created = req.Created
                     };
 
                     if (amountLeftToPay > 0) {
@@ -76,7 +79,8 @@ namespace HouseOwage.Logic.UserLogic
                         AmountLeftToPay = amountLeftToPay,
                         RequestMadeTo = vm.UserDetails.Name,
                         RequestName = req.Name,
-                        RequestFrom = req.CreatedBy.Name
+                        RequestFrom = req.CreatedBy.Name,
+                        Created = req.Created
                     };
 
                     if (amountLeftToPay > 0)
@@ -92,7 +96,7 @@ namespace HouseOwage.Logic.UserLogic
                 vm.RequestsSentToMeAndPaid = requestsSentToMeAndPaid;
                 vm.RequestsSentToMeAndUnpaid = requestsSentToMeAndUnpaid;
 
-                vm.PaymentsRequiringConfirmation = db.Payments.Where(p => p.PaymentRequest.CreatedBy.UserId == vm.UserDetails.UserId && !p.Confirmed)
+                vm.PaymentsRequiringConfirmation = db.Payments.Where(p => p.PaymentRequest.CreatedBy.UserId == vm.UserDetails.UserId && !p.Confirmed && !p.Archived)
                     .Select(p => new PaymentViewModel()
                     {
                         AmountPaid = p.Amount,
@@ -100,10 +104,11 @@ namespace HouseOwage.Logic.UserLogic
                         PaymentId = p.PaymentId,
                         PaymentMadeBy = p.PaymentRequest.SentTo.Name,
                         PaymentMadeTo = p.PaymentRequest.CreatedBy.Name,
-                        PaymentRequestName = p.PaymentRequest.Name
+                        PaymentRequestName = p.PaymentRequest.Name,
+                        Created = p.Created
                     }).ToList();
 
-                vm.MyUnconfirmedPayments = db.Payments.Where(p => p.PaymentRequest.SentTo.UserId == vm.UserDetails.UserId && !p.Confirmed)
+                vm.MyUnconfirmedPayments = db.Payments.Where(p => p.PaymentRequest.SentTo.UserId == vm.UserDetails.UserId && !p.Confirmed && !p.Archived)
                     .Select(p => new PaymentViewModel()
                     {
                         AmountPaid = p.Amount,
@@ -111,7 +116,8 @@ namespace HouseOwage.Logic.UserLogic
                         PaymentId = p.PaymentId,
                         PaymentMadeBy = p.PaymentRequest.SentTo.Name,
                         PaymentMadeTo = p.PaymentRequest.CreatedBy.Name,
-                        PaymentRequestName = p.PaymentRequest.Name
+                        PaymentRequestName = p.PaymentRequest.Name,
+                        Created = p.Created
                     }).ToList();
 
                 return vm;

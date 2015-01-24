@@ -1,0 +1,48 @@
+﻿@model HouseOwage.Models.Payment
+@{
+    ViewBag.Title = "Edit Payment";
+    ViewBag.InputClass = "form-control";
+}
+
+<div class="row">
+    <h1>Edit Payment</h1>
+</div>
+
+<div class="row">
+
+    @using (Html.BeginForm("Edit", "Payment", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(m => m.Created)
+        @Html.HiddenFor(m => m.PaymentId)
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Amount)
+            @Html.TextBoxFor(m => m.Amount, new { @class = ViewBag.InputClass, type = "number", step = "any" })
+            @Html.ValidationMessageFor(m => m.Amount)
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Change Payment</button>
+            <button style="float:right;" onclick="deletePaymentRequest()" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+        </div>
+
+    }
+
+</div>
+
+@using (Html.BeginForm("Delete", "Payment", FormMethod.Post, new { id = "deleteForm" }))
+{
+    @Html.Hidden("paymentId", Model.PaymentId)
+}
+
+
+<script>
+    function deletePaymentRequest() {
+        var r = confirm("Are you sure you want to delete this request?");
+        if (r == true) {
+            $('#deleteForm').submit();
+        }
+    }
+</script>

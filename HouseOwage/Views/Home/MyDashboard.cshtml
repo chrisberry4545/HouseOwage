@@ -12,6 +12,7 @@
             <th>User</th>
             <th>Paid you</th>
             <th>For</th>
+            <th>On</th>
             <th>Confirm Payment</th>
         </tr>
         @foreach (var payment in Model.PaymentsRequiringConfirmation)
@@ -43,6 +44,7 @@
             <th>Owed For</th>
             <th>Amount left to pay</th>
             <th>Owed to</th>
+            <th>Date Sent</th>
             <th>Pay</th>
         </tr>
         @foreach (var paymentRequest in Model.RequestsSentToMeAndUnpaid)
@@ -51,6 +53,7 @@
                 <td>@paymentRequest.RequestName</td>
                 <td>£@paymentRequest.AmountLeftToPay</td>
                 <td>@paymentRequest.RequestFrom</td>
+                <td>@paymentRequest.Created.ToShortDateString()</td>
                 <td>
                     @using (Html.BeginForm("New", "Payment", FormMethod.Post))
                     {
@@ -81,6 +84,7 @@ else
             <th>Owed for</th>
             <th>Amount left to pay</th>
             <th>Request made to</th>
+            <th>Created</th>
             <th>Edit</th>
         </tr>
         @foreach (var paymentRequest in Model.MyUnresolvedRequests)
@@ -89,6 +93,7 @@ else
                 <td>@paymentRequest.RequestName</td>
                 <td>£@paymentRequest.AmountLeftToPay</td>
                 <td>@paymentRequest.RequestMadeTo</td>
+                <td>@paymentRequest.Created.ToShortDateString()</td>
                 <td>
                     @using (Html.BeginForm("Edit", "PaymentRequest", FormMethod.Get))
                     {
@@ -126,14 +131,24 @@ else
             <th>Paid to</th>
             <th>Amount</th>
             <th>Paid for</th>
+            <td>Date</td>
+            <th>Edit</th>
         </tr>
 
         @foreach (var unconfirmedPayment in Model.MyUnconfirmedPayments)
         {
             <tr>
                 <td>@unconfirmedPayment.PaymentMadeTo</td>
-                <td>@unconfirmedPayment.AmountPaid</td>
+                <td>£@unconfirmedPayment.AmountPaid</td>
                 <td>@unconfirmedPayment.PaymentRequestName</td>
+                <td>@unconfirmedPayment.Created.ToShortDateString()</td>
+                <td>
+                    @using (Html.BeginForm("Edit", "Payment", FormMethod.Get))
+                    {
+                        @Html.Hidden("paymentId", unconfirmedPayment.PaymentId)
+                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button>
+                    }
+                </td>
             </tr>
         }
 

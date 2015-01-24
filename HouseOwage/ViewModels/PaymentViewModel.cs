@@ -14,5 +14,6 @@ namespace HouseOwage.ViewModels
         public String PaymentMadeTo { get; set; }
         public bool Confirmed { get; set; }
         public String PaymentRequestName { get; set; }
+        public DateTime Created { get; set; }
     }
 }

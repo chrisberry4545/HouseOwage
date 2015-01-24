@@ -14,5 +14,6 @@ namespace HouseOwage.ViewModels
         public String RequestMadeTo { get; set; }
         public String RequestFrom { get; set; }
         public bool Confirmed { get; set; }
+        public DateTime Created { get; set; }
     }
 }

@@ -39,6 +39,7 @@ namespace HouseOwage.Controllers
                 {
                     paymentRequest.CreatedBy = db.Users.FirstOrDefault(u => user.UserId == u.UserId);
                     paymentRequest.SentTo = db.Users.FirstOrDefault(u => u.UserId == paymentRequest.SentTo.UserId);
+                    paymentRequest.Created = DateTime.Now;
                     db.PaymentRequests.Add(paymentRequest);
                     db.SaveChanges();
                 }
@@ -70,7 +71,7 @@ namespace HouseOwage.Controllers
         public ActionResult Edit(PaymentRequest paymentRequest)
         {
             User user = (User)Session[HomeController.UserSession];
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && user != null)
             {
                 using (var db = new HouseOwageContext())
                 {
@@ -100,6 +101,7 @@ namespace HouseOwage.Controllers
             }
             return RedirectToAction("MyDashboard", "Home");
         }
+
         private void SetUpViewBag()
         {
             var allUsers = Logic.UserLogic.AllUsers.GetAllUsers();

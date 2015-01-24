@@ -2,6 +2,7 @@
 using HouseOwage.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -45,12 +46,63 @@ namespace HouseOwage.Controllers
                 using (var db = new HouseOwageContext())
                 {
                     payment.PaymentRequest = db.PaymentRequests.FirstOrDefault(r => r.PaymentRequestId == payment.PaymentRequest.PaymentRequestId);
+                    payment.Created = DateTime.Now;
                     db.Payments.Add(payment);
                     db.SaveChanges();
                 }
                 return RedirectToAction("MyDashboard", "Home");
             //}
             //return View("Create", payment);
+        }
+
+        [HttpGet]
+        public ActionResult Edit(int paymentId)
+        {
+            if (Session[HomeController.UserSession] != null)
+            {
+                using (var db = new HouseOwageContext())
+                {
+                    var payment =
+                        db.Payments
+                        .Include("PaymentRequest")
+                        .FirstOrDefault(r => r.PaymentId == paymentId);
+                    return View("Edit", payment);
+                }
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Payment payment)
+        {
+            User user = (User)Session[HomeController.UserSession];
+            if (ModelState.IsValid && user != null)
+            {
+                using (var db = new HouseOwageContext())
+                {
+                    db.Payments.Attach(payment);
+                    var entry = db.Entry(payment);
+                    entry.State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+                return RedirectToAction("MyDashboard", "Home");
+            }
+            return View("Edit", payment);
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int paymentId)
+        {
+            using (var db = new HouseOwageContext())
+            {
+                var payment = db.Payments.FirstOrDefault(p => p.PaymentId == paymentId);
+                if (payment != null)
+                {
+                    payment.Archived = true;
+                    db.SaveChanges();
+                }
+            }
+            return RedirectToAction("MyDashboard", "Home");
         }
 
 
