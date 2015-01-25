@@ -5,7 +5,7 @@
 
 <ul class="nav nav-pills nav-justified">
     <li role="presentation" class="active"><a data-toggle="tab" href="#main">Main</a></li>
-    <li role="presentation"><a data-toggle="tab" href="#externalpayments">External Payments</a></li>
+    <li role="presentation"><a data-toggle="tab" href="#externalpayments">External Requests</a></li>
     <li role="presentation"><a data-toggle="tab" href="#unconfirmedpayments">Unconfirmed Payments</a></li>
 </ul>
 
@@ -214,7 +214,7 @@
         }
         else
         {
-            <span class="noDataSpan">You don't have any external payments</span>
+            <span class="noDataSpan">You don't have any external payment requests</span>
         }
 
         @using (Html.BeginForm("Create", "ExternalPaymentRequest", FormMethod.Get))
