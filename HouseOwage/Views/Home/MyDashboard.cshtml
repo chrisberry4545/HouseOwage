@@ -34,6 +34,17 @@
                 </td>
             </tr>
         }
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <button onclick="confirmAll()" type="submit" class="btn btn-success">
+                    <i class="glyphicon glyphicon-ok"></i> Confirm All
+                </button>
+            </td>
+        </tr>
     </table>
 }
 
@@ -275,6 +286,14 @@ else
 
     function reloadPage() {
         window.location.href = '/Home/MyDashboard';
+    }
+    
+    function confirmAll() {
+        if (confirm("Are you sure you want to confirm all payments?")) {
+            $.post('/Payment/ConfirmAllPayments', function (data) {
+                reloadPage();
+            });
+        }
     }
 
 </script>

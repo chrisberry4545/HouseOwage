@@ -112,17 +112,41 @@ namespace HouseOwage.Controllers
             //Check user is payment receiver
             var currentUser = (User)Session[HomeController.UserSession];
 
-            using (var db = new HouseOwageContext())
+            if (currentUser != null)
             {
-                var payment = db.Payments.FirstOrDefault(p => p.PaymentId == paymentId && p.PaymentRequest.CreatedBy.UserId == currentUser.UserId);
-                if (payment != null)
+                using (var db = new HouseOwageContext())
                 {
-                    payment.Confirmed = true;
-                    db.SaveChanges();
+                    var payment = db.Payments.FirstOrDefault(p => p.PaymentId == paymentId && p.PaymentRequest.CreatedBy.UserId == currentUser.UserId);
+                    if (payment != null)
+                    {
+                        payment.Confirmed = true;
+                        db.SaveChanges();
+                    }
                 }
             }
             //TODO::No error thrown if user is not the correct person to confirm payments or the payment cannot be found.
             return RedirectToAction("MyDashboard", "Home");
+        }
+
+        [HttpPost]
+        public ActionResult ConfirmAllPayments()
+        {
+            //Check user is payment receiver
+            var currentUser = (User)Session[HomeController.UserSession];
+            if (currentUser != null)
+            {
+                using (var db = new HouseOwageContext())
+                {
+                    var allUnconfirmedPayments = db.Payments.Where(p => !p.Confirmed && p.PaymentRequest.CreatedBy.UserId == currentUser.UserId).ToList();
+                    foreach (var payment in allUnconfirmedPayments)
+                    {
+                        payment.Confirmed = true;
+                        db.SaveChanges();
+                    }
+                    return Content("true");
+                }
+            }
+            return Content("false");
         }
 
         [HttpPost]
