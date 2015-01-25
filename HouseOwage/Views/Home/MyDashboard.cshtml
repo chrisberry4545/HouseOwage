@@ -182,6 +182,44 @@ else
 
     </table>
     }
+    
+@if (Model.ExternalPaymentRequests != null && Model.ExternalPaymentRequests.Count() > 0)
+{
+    <hr>
+    <h1>Outstanding External Payments</h1>
+    <table class="table table-striped">
+        <tr>
+            <th>For</th>
+            <th>Amount</th>
+            <th>To</th>
+            <th>Created</th>
+            <th>Edit</th>
+        </tr>
+        @foreach (var externalPaymentRequest in Model.ExternalPaymentRequests)
+        {
+        <tr>
+            <td>@externalPaymentRequest.Name</td>
+            <td>£@externalPaymentRequest.Amount</td>
+            <td>@externalPaymentRequest.RequestTo</td>
+            <td>@externalPaymentRequest.Created.ToShortDateString()</td>
+            <td>
+                @using (Html.BeginForm("Edit", "ExternalPaymentRequest", FormMethod.Get))
+                {
+                    @Html.Hidden("paymentRequestId", externalPaymentRequest.ExternalPaymentRequestId)
+                    <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button>
+                }
+            </td>
+        </tr>
+        }
+        <tr>
+            <td>Total</td>
+            <td>£@Model.ExternalPaymentRequests.Sum(r => r.Amount)</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+}
 
 <script>
 

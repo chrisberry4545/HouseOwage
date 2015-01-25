@@ -118,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\HouseOwageContext.cs" />
+    <Compile Include="Controllers\ExternalPaymentRequestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\PaymentRequestController.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Logic\DashboardSetup.cs" />
     <Compile Include="Logic\UserLogic\AllUsers.cs" />
     <Compile Include="Logic\UserLogic\Login.cs" />
     <Compile Include="Logic\UserLogic\Passwords.cs" />
@@ -156,7 +158,16 @@
     <Compile Include="Migrations\201501241236507_PaymentArchiveCreated.Designer.cs">
       <DependentUpon>201501241236507_PaymentArchiveCreated.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201501251349583_ExternalPaymentRequests.cs" />
+    <Compile Include="Migrations\201501251349583_ExternalPaymentRequests.Designer.cs">
+      <DependentUpon>201501251349583_ExternalPaymentRequests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201501251443263_ArchiveExternal.cs" />
+    <Compile Include="Migrations\201501251443263_ArchiveExternal.Designer.cs">
+      <DependentUpon>201501251443263_ArchiveExternal.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\ExternalPaymentRequest.cs" />
     <Compile Include="Models\Payment.cs" />
     <Compile Include="Models\PaymentRequest.cs" />
     <Compile Include="Models\User.cs" />
@@ -244,6 +255,12 @@
     <EmbeddedResource Include="Migrations\201501241236507_PaymentArchiveCreated.resx">
       <DependentUpon>201501241236507_PaymentArchiveCreated.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501251349583_ExternalPaymentRequests.resx">
+      <DependentUpon>201501251349583_ExternalPaymentRequests.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501251443263_ArchiveExternal.resx">
+      <DependentUpon>201501251443263_ArchiveExternal.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\bootstrap-theme.css.map" />
@@ -263,6 +280,8 @@
     <Content Include="Views\PaymentRequest\Edit.cshtml" />
     <Content Include="Views\Payment\Edit.cshtml" />
     <Content Include="Views\PaymentRequest\Create.cshtml" />
+    <Content Include="Views\ExternalPaymentRequest\Create.cshtml" />
+    <Content Include="Views\ExternalPaymentRequest\Edit.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

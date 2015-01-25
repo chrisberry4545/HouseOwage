@@ -1,0 +1,61 @@
+﻿@model HouseOwage.Models.ExternalPaymentRequest
+@{
+    ViewBag.Title = "Edit External Request";
+    ViewBag.InputClass = "form-control";
+}
+
+<div class="row">
+    <h1>Edit External Payment Request</h1>
+</div>
+
+<div class="row">
+
+    @using (Html.BeginForm("Edit", "ExternalPaymentRequest", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(m => m.ExternalPaymentRequestId)
+        @Html.HiddenFor(m => m.Created)
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Name)
+            @Html.TextBoxFor(m => m.Name, new { @class = ViewBag.InputClass, placeholder = "What is the request for?" })
+            @Html.ValidationMessageFor(m => m.Name)
+        </div>
+
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.Amount)
+            @Html.TextBoxFor(m => m.Amount, new { @class = ViewBag.InputClass, type = "number", step = "any" })
+            @Html.ValidationMessageFor(m => m.Amount)
+        </div>
+
+
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.RequestTo)
+            @Html.TextBoxFor(m => m.RequestTo, new { @class = ViewBag.InputClass, placeholder = "Who is the request to?" })
+            @Html.ValidationMessageFor(m => m.RequestTo)
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Change External Request</button>
+            <button style="float:right;" onclick="deleteExternalRequest()" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+        </div>
+
+    }
+
+</div>
+
+@using (Html.BeginForm("Delete", "ExternalPaymentRequest", FormMethod.Post, new { id = "deleteForm" }))
+{
+    @Html.Hidden("paymentRequestId", Model.ExternalPaymentRequestId)
+}
+
+
+<script>
+    function deleteExternalRequest() {
+        var r = confirm("Are you sure you want to delete this request?");
+        if (r == true) {
+            $('#deleteForm').submit();
+        }
+    }
+</script>

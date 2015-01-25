@@ -1,0 +1,41 @@
+﻿@model HouseOwage.Models.ExternalPaymentRequest
+@{
+    ViewBag.Title = "Create External Request";
+    ViewBag.InputClass = "form-control";
+}
+
+<div class="row">
+    <h1>Create External Payment Request</h1>
+</div>
+
+<div class="row">
+
+    @using (Html.BeginForm("Create", "ExternalPaymentRequest", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Name)
+            @Html.TextBoxFor(m => m.Name, new { @class = ViewBag.InputClass, placeholder = "What is the request for?" })
+            @Html.ValidationMessageFor(m => m.Name)
+        </div>
+
+        <div class="form-group">
+            @Html.DisplayNameFor(m => m.Amount)
+            @Html.TextBoxFor(m => m.Amount, new { @class = ViewBag.InputClass, type = "number", step = "any" })
+            @Html.ValidationMessageFor(m => m.Amount)
+        </div>
+
+        <div class="form-group">
+            @Html.DisplayFor(m => m.RequestTo)
+            @Html.TextBoxFor(m => m.RequestTo, new { @class = ViewBag.InputClass, placeholder = "Who is the request to?" })
+            @Html.ValidationMessageFor(m => m.RequestTo)
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Create External Request</button>
+        </div>
+
+    }
+
+</div>

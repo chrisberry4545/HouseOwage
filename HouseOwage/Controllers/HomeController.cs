@@ -47,7 +47,7 @@ namespace HouseOwage.Controllers
 
             if (userLoggedIn != null)
             {
-                var dashboardVM = Logic.UserLogic.Login.GetDashboardVMForUser(userLoggedIn);
+                var dashboardVM = Logic.DashboardSetup.GetDashboardVMForUser(userLoggedIn);
                 Session[UserSession] = userLoggedIn;
                 return View("MyDashboard", dashboardVM);
             }

@@ -22,5 +22,6 @@ namespace HouseOwage.Context
         public DbSet<Payment> Payments { get; set; }
         public DbSet<PaymentRequest> PaymentRequests { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<ExternalPaymentRequest> ExternalPaymentRequests { get; set; }
     }
 }

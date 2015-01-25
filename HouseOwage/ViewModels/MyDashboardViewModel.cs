@@ -22,5 +22,7 @@ namespace HouseOwage.ViewModels
         public IEnumerable<PaymentViewModel> MyUnconfirmedPayments { get; set; }
 
         public IEnumerable<SelectListItem> UserNames { get; set; }
+
+        public IEnumerable<ExternalPaymentRequest> ExternalPaymentRequests { get; set; }
     }
 }
