@@ -125,5 +125,33 @@ namespace HouseOwage.Controllers
             return RedirectToAction("MyDashboard", "Home");
         }
 
+        [HttpPost]
+        public ActionResult ClearPayments(List<int> paymentRequestIds)
+        {
+            var currentUser = (User)Session[HomeController.UserSession];
+            if (currentUser != null)
+            {
+                using (var db = new HouseOwageContext())
+                {
+                    var allPaymentRequests = db.PaymentRequests
+                        .Where(r => paymentRequestIds.Contains(r.PaymentRequestId) && r.SentTo_UserId == currentUser.UserId)
+                        .ToList();
+                    foreach(var req in allPaymentRequests) 
+                    {
+                        Payment payment = new Payment()
+                        {
+                            Amount = req.Amount,
+                            Created = DateTime.Today,
+                            PaymentRequest = req
+                        };
+                        db.Payments.Add(payment);
+                    }
+                    db.SaveChanges();
+                    return Content("Ok");
+                }
+            }
+            return Content("Fail");
+        }
+
     }
 }

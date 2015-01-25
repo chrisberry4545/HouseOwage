@@ -22,6 +22,7 @@
                 <td>@payment.PaymentMadeBy</td>
                 <td>@payment.AmountPaid</td>
                 <td>@payment.PaymentRequestName</td>
+                <td>@payment.Created.ToShortDateString()</td>
                 <td>
                     @using (Html.BeginForm("ConfirmPayment", "Payment", FormMethod.Post))
                     {
@@ -46,7 +47,6 @@
 <h1>Money I owe</h1>
 @if (Model.RequestsSentToMeAndUnpaid != null && Model.RequestsSentToMeAndUnpaid.Count() > 0)
 {
-    
     <table class="table table-striped">
         <tr>
             <th>Owed For</th>
@@ -69,6 +69,7 @@
                         <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon glyphicon-transfer"></i></button>
                     }
                 </td>
+                <td class="hidden paymentRequestIds">@paymentRequest.PaymentRequestId</td>
             </tr>
         }
         <tr>
@@ -82,6 +83,9 @@
             }
             <td></td>
             <td></td>
+            <td>
+                <button onclick="payAll()" class="btn btn-success">Pay all</button>
+            </td>
         </tr>
     </table>
 }
@@ -196,4 +200,42 @@ else
             }
         });
     });
+
+    function payAll() {
+        var selected = $('#moneyIOweUserNames').val();
+        if (confirm("Are you sure you want to clear all payments for " + selected + "?")) {
+            var paymentIds;
+            if (selected == "All") {
+                paymentIds = $('.paymentRequestIds');
+            } else {
+                paymentIds = $('.preq' + selected + " .paymentRequestIds");
+            }
+            var allIds = [];
+            for (var i = 0; i < paymentIds.length; i++) {
+                allIds.push(paymentIds[i].innerHTML);
+            }
+
+            if (allIds.length > 0) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Payment/ClearPayments",
+                    data: { paymentRequestIds: allIds },
+                    complete: function (data) {
+                        reloadPage();
+                    },
+                    dataType: "json",
+                    traditional: true
+                });
+
+            } else {
+                alert("You don't owe " + selected + " anything.");
+            }
+        }
+    }
+
+    function reloadPage() {
+        window.location.href = '/Home/MyDashboard';
+    }
+
 </script>
