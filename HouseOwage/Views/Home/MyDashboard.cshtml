@@ -3,6 +3,7 @@
     ViewBag.Title = "My Dashboard";
 }
 
+
 @if (Model.PaymentsRequiringConfirmation != null && Model.PaymentsRequiringConfirmation.Count() > 0)
 {
     <h1>Confirm Receipt of Payments</h1>
@@ -35,10 +36,17 @@
     </table>
 }
 
+<hr>
+
+<div class="form-group">
+    <label for="moneyIOweUserNames">Filter by User</label>
+    @Html.DropDownList("moneyIOweUserNames", Model.UserNames, new { @class = "form-control" })
+</div>
 
 <h1>Money I owe</h1>
 @if (Model.RequestsSentToMeAndUnpaid != null && Model.RequestsSentToMeAndUnpaid.Count() > 0)
 {
+    
     <table class="table table-striped">
         <tr>
             <th>Owed For</th>
@@ -49,7 +57,7 @@
         </tr>
         @foreach (var paymentRequest in Model.RequestsSentToMeAndUnpaid)
         {
-            <tr>
+            <tr class="@("preq" + paymentRequest.RequestFrom) preqRow">
                 <td>@paymentRequest.RequestName</td>
                 <td>£@paymentRequest.AmountLeftToPay</td>
                 <td>@paymentRequest.RequestFrom</td>
@@ -65,7 +73,13 @@
         }
         <tr>
             <td>Total:</td>
-            <td>£@Model.RequestsSentToMeAndUnpaid.Sum(p => p.AmountLeftToPay)</td>
+            <td class="total">£@Model.RequestsSentToMeAndUnpaid.Sum(p => p.AmountLeftToPay)</td>
+            @foreach (var user in Model.UserNames)
+            {
+                <td class="@("preq" + user.Value) usertotal hidden">
+                    £@Model.RequestsSentToMeAndUnpaid.Where(p => p.RequestFrom.Equals(user.Value)).Sum(p => p.AmountLeftToPay)
+                </td>
+            }
             <td></td>
             <td></td>
         </tr>
@@ -75,6 +89,7 @@ else
 {
     <span>You have no overdue payments</span>
 }
+
 
 <h1>Money I'm owed</h1>
 @if (Model.MyUnresolvedRequests != null && Model.MyUnresolvedRequests.Count() > 0)
@@ -89,7 +104,7 @@ else
         </tr>
         @foreach (var paymentRequest in Model.MyUnresolvedRequests)
         {
-            <tr>
+            <tr class="@("preq" + paymentRequest.RequestMadeTo) preqRow">
                 <td>@paymentRequest.RequestName</td>
                 <td>£@paymentRequest.AmountLeftToPay</td>
                 <td>@paymentRequest.RequestMadeTo</td>
@@ -106,7 +121,13 @@ else
         }
         <tr>
             <td>Total:</td>
-            <td>£@Model.MyUnresolvedRequests.Sum(p => p.AmountLeftToPay)</td>
+            <td class="total">£@Model.MyUnresolvedRequests.Sum(p => p.AmountLeftToPay)</td>
+            @foreach (var user in Model.UserNames)
+            {
+                <td class="@("preq" + user.Value) usertotal hidden">
+                    £@Model.MyUnresolvedRequests.Where(p => p.RequestMadeTo.Equals(user.Value)).Sum(p => p.AmountLeftToPay)
+                </td>
+            }
             <td></td>
             <td></td>
         </tr>
@@ -125,6 +146,8 @@ else
 
     @if (Model.MyUnconfirmedPayments != null && Model.MyUnconfirmedPayments.Count() > 0)
     {
+
+<hr>
         <h1>My Unconfirmed Payments</h1>
     <table class="table table-striped">
         <tr>
@@ -154,3 +177,23 @@ else
 
     </table>
     }
+
+<script>
+
+    $(document).ready(function () {
+        $('#moneyIOweUserNames').change(function () {
+            var hidden = 'hidden';
+            var selected = $('#moneyIOweUserNames').val();
+            $('.usertotal').addClass(hidden);
+            if (selected != "All") {
+                var searchTerm = '.preq' + selected;
+                $('.preqRow').addClass(hidden);
+                $('.total').addClass(hidden);
+                $(searchTerm).removeClass(hidden);
+            } else {
+                $('.preqRow').removeClass(hidden);
+                $('.total').removeClass(hidden);
+            }
+        });
+    });
+</script>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace HouseOwage.ViewModels
 {
@@ -19,5 +20,7 @@ namespace HouseOwage.ViewModels
 
         public IEnumerable<PaymentViewModel> PaymentsRequiringConfirmation { get; set; }
         public IEnumerable<PaymentViewModel> MyUnconfirmedPayments { get; set; }
+
+        public IEnumerable<SelectListItem> UserNames { get; set; }
     }
 }

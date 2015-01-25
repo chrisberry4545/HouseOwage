@@ -152,6 +152,10 @@
     <Compile Include="Migrations\201501222252244_PaymentRequestArchive.Designer.cs">
       <DependentUpon>201501222252244_PaymentRequestArchive.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201501241236507_PaymentArchiveCreated.cs" />
+    <Compile Include="Migrations\201501241236507_PaymentArchiveCreated.Designer.cs">
+      <DependentUpon>201501241236507_PaymentArchiveCreated.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Payment.cs" />
     <Compile Include="Models\PaymentRequest.cs" />
@@ -170,6 +174,12 @@
     <Content Include="css\bootstrap-theme.min.css" />
     <Content Include="css\bootstrap.css" />
     <Content Include="css\bootstrap.min.css" />
+    <Content Include="css\chris.css">
+      <DependentUpon>chris.scss</DependentUpon>
+    </Content>
+    <Content Include="css\chris.min.css">
+      <DependentUpon>chris.css</DependentUpon>
+    </Content>
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="js\bootstrap.js" />
@@ -230,6 +240,9 @@
     <EmbeddedResource Include="Migrations\201501222252244_PaymentRequestArchive.resx">
       <DependentUpon>201501222252244_PaymentRequestArchive.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501241236507_PaymentArchiveCreated.resx">
+      <DependentUpon>201501241236507_PaymentArchiveCreated.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\bootstrap-theme.css.map" />
@@ -239,10 +252,15 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\chris.scss" />
+    <Content Include="css\chris.css.map">
+      <DependentUpon>chris.css</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\File Publish.pubxml" />
     <Content Include="Views\User\ChangePassword.cshtml" />
     <Content Include="Views\User\Create.cshtml" />
     <Content Include="Views\PaymentRequest\Edit.cshtml" />
+    <Content Include="Views\Payment\Edit.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

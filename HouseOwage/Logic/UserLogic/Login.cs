@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace HouseOwage.Logic.UserLogic
 {
@@ -119,6 +120,21 @@ namespace HouseOwage.Logic.UserLogic
                         PaymentRequestName = p.PaymentRequest.Name,
                         Created = p.Created
                     }).ToList();
+
+                List<SelectListItem> usersSelectList = new List<SelectListItem>();
+                usersSelectList.Add(new SelectListItem() {
+                    Text = "All",
+                    Value = "All",
+                    Selected = true
+                });
+                usersSelectList.AddRange(db.Users
+                    .Where(u => u.UserId != vm.UserDetails.UserId)
+                    .Select(u => new SelectListItem() {
+                   Text = u.Name,
+                   Value = u.Name
+                }).ToList());
+
+                vm.UserNames = usersSelectList;
 
                 return vm;
             }
