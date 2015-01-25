@@ -3,234 +3,275 @@
     ViewBag.Title = "My Dashboard";
 }
 
-
-@if (Model.PaymentsRequiringConfirmation != null && Model.PaymentsRequiringConfirmation.Count() > 0)
-{
-    <h1>Confirm Receipt of Payments</h1>
-
-    <table class="table table-striped">
-        <tr>
-            <th>User</th>
-            <th>Paid you</th>
-            <th>For</th>
-            <th>On</th>
-            <th>Confirm Payment</th>
-        </tr>
-        @foreach (var payment in Model.PaymentsRequiringConfirmation)
-        {
-            <tr>
-                <td>@payment.PaymentMadeBy</td>
-                <td>@payment.AmountPaid</td>
-                <td>@payment.PaymentRequestName</td>
-                <td>@payment.Created.ToShortDateString()</td>
-                <td>
-                    @using (Html.BeginForm("ConfirmPayment", "Payment", FormMethod.Post))
-                    {
-                        @Html.Hidden("paymentId", payment.PaymentId)
-                        <button type="submit" class="btn btn-success">
-                            <i class="glyphicon glyphicon-ok"></i>
-                        </button>
-                    }
-                </td>
-            </tr>
-        }
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-                <button onclick="confirmAll()" type="submit" class="btn btn-success">
-                    <i class="glyphicon glyphicon-ok"></i> Confirm All
-                </button>
-            </td>
-        </tr>
-    </table>
-}
+<ul class="nav nav-pills nav-justified">
+    <li role="presentation" class="active"><a data-toggle="tab" href="#main">Main</a></li>
+    <li role="presentation"><a data-toggle="tab" href="#externalpayments">External Payments</a></li>
+    <li role="presentation"><a data-toggle="tab" href="#unconfirmedpayments">Unconfirmed Payments</a></li>
+</ul>
 
 <hr>
 
-<div class="form-group">
-    <label for="moneyIOweUserNames">Filter by User</label>
-    @Html.DropDownList("moneyIOweUserNames", Model.UserNames, new { @class = "form-control" })
+<div class="tab-content">
+    <div id="main" class="tab-pane fade in active">
+
+        @if (Model.PaymentsRequiringConfirmation != null && Model.PaymentsRequiringConfirmation.Count() > 0)
+        {
+            <h1>Confirm Receipt of Payments</h1>
+
+            <table class="table table-striped">
+                <tr>
+                    <th>User</th>
+                    <th>Paid you</th>
+                    <th>For</th>
+                    <th>On</th>
+                    <th>Confirm Payment</th>
+                </tr>
+                @foreach (var payment in Model.PaymentsRequiringConfirmation)
+                {
+                    <tr>
+                        <td>@payment.PaymentMadeBy</td>
+                        <td>@payment.AmountPaid</td>
+                        <td>@payment.PaymentRequestName</td>
+                        <td>@payment.Created.ToShortDateString()</td>
+                        <td>
+                            @using (Html.BeginForm("ConfirmPayment", "Payment", FormMethod.Post))
+                            {
+                                @Html.Hidden("paymentId", payment.PaymentId)
+                                <button type="submit" class="btn btn-success">
+                                    <i class="glyphicon glyphicon-ok"></i>
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <button onclick="confirmAll()" type="submit" class="btn btn-success">
+                            <i class="glyphicon glyphicon-ok"></i> Confirm All
+                        </button>
+                    </td>
+                </tr>
+            </table>
+
+            <hr>
+        }
+
+        <div class="form-group">
+            <label for="moneyIOweUserNames">Filter by User</label>
+            @Html.DropDownList("moneyIOweUserNames", Model.UserNames, new { @class = "form-control" })
+        </div>
+
+        <h1>Money I owe</h1>
+        @if (Model.RequestsSentToMeAndUnpaid != null && Model.RequestsSentToMeAndUnpaid.Count() > 0)
+        {
+            <table class="table table-striped">
+                <tr>
+                    <th>Owed For</th>
+                    <th>Amount left to pay</th>
+                    <th>Owed to</th>
+                    <th>Date Sent</th>
+                    <th>Pay</th>
+                </tr>
+                @foreach (var paymentRequest in Model.RequestsSentToMeAndUnpaid)
+                {
+                    <tr class="@("preq" + paymentRequest.RequestFrom) preqRow">
+                        <td>@paymentRequest.RequestName</td>
+                        <td>£@paymentRequest.AmountLeftToPay</td>
+                        <td>@paymentRequest.RequestFrom</td>
+                        <td>@paymentRequest.Created.ToShortDateString()</td>
+                        <td>
+                            @using (Html.BeginForm("New", "Payment", FormMethod.Post))
+                            {
+                                @Html.Hidden("requestId", paymentRequest.PaymentRequestId)
+                                <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon glyphicon-transfer"></i></button>
+                            }
+                        </td>
+                        <td class="hidden paymentRequestIds">@paymentRequest.PaymentRequestId</td>
+                    </tr>
+                }
+                <tr>
+                    <td>Total:</td>
+                    <td class="total">£@Model.RequestsSentToMeAndUnpaid.Sum(p => p.AmountLeftToPay)</td>
+                    @foreach (var user in Model.UserNames)
+                    {
+                        <td class="@("preq" + user.Value) usertotal hidden">
+                            £@Model.RequestsSentToMeAndUnpaid.Where(p => p.RequestFrom.Equals(user.Value)).Sum(p => p.AmountLeftToPay)
+                        </td>
+                    }
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <button onclick="payAll()" class="btn btn-success">Pay all</button>
+                    </td>
+                </tr>
+            </table>
+        }
+        else
+        {
+            <span class="noDataSpan">You have no overdue payments</span>
+        }
+
+
+        <h1>Money I'm owed</h1>
+        @if (Model.MyUnresolvedRequests != null && Model.MyUnresolvedRequests.Count() > 0)
+        {
+            <table class="table table-striped">
+                <tr>
+                    <th>Owed for</th>
+                    <th>Amount left to pay</th>
+                    <th>Request made to</th>
+                    <th>Created</th>
+                    <th>Edit</th>
+                </tr>
+                @foreach (var paymentRequest in Model.MyUnresolvedRequests)
+                {
+                    <tr class="@("preq" + paymentRequest.RequestMadeTo) preqRow">
+                        <td>@paymentRequest.RequestName</td>
+                        <td>£@paymentRequest.AmountLeftToPay</td>
+                        <td>@paymentRequest.RequestMadeTo</td>
+                        <td>@paymentRequest.Created.ToShortDateString()</td>
+                        <td>
+                            @using (Html.BeginForm("Edit", "PaymentRequest", FormMethod.Get))
+                            {
+                                @Html.Hidden("paymentRequestId", paymentRequest.PaymentRequestId)
+                                <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button>
+                            }
+                        </td>
+
+                    </tr>
+                }
+                <tr>
+                    <td>Total:</td>
+                    <td class="total">£@Model.MyUnresolvedRequests.Sum(p => p.AmountLeftToPay)</td>
+                    @foreach (var user in Model.UserNames)
+                    {
+                        <td class="@("preq" + user.Value) usertotal hidden">
+                            £@Model.MyUnresolvedRequests.Where(p => p.RequestMadeTo.Equals(user.Value)).Sum(p => p.AmountLeftToPay)
+                        </td>
+                    }
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        }
+        else
+        {
+            <span class="noDataSpan">You don't have any outstanding requests</span>
+        }
+
+        @using (Html.BeginForm("Create", "PaymentRequest", FormMethod.Get))
+        {
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Add Request</button>
+            </div>
+        }
+
+    </div>
+    
+    <div id="externalpayments" class="tab-pane fade">
+
+        @if (Model.ExternalPaymentRequests != null && Model.ExternalPaymentRequests.Count() > 0)
+        {
+            <hr>
+            <h1>Outstanding External Payments</h1>
+            <table class="table table-striped">
+                <tr>
+                    <th>For</th>
+                    <th>Amount</th>
+                    <th>To</th>
+                    <th>Created</th>
+                    <th>Edit</th>
+                </tr>
+                @foreach (var externalPaymentRequest in Model.ExternalPaymentRequests)
+                {
+                    <tr>
+                        <td>@externalPaymentRequest.Name</td>
+                        <td>£@externalPaymentRequest.Amount</td>
+                        <td>@externalPaymentRequest.RequestTo</td>
+                        <td>@externalPaymentRequest.Created.ToShortDateString()</td>
+                        <td>
+                            @using (Html.BeginForm("Edit", "ExternalPaymentRequest", FormMethod.Get))
+                            {
+                                @Html.Hidden("paymentRequestId", externalPaymentRequest.ExternalPaymentRequestId)
+                                <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button>
+                            }
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td>Total</td>
+                    <td>£@Model.ExternalPaymentRequests.Sum(r => r.Amount)</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        }
+        else
+        {
+            <span class="noDataSpan">You don't have any external payments</span>
+        }
+
+        @using (Html.BeginForm("Create", "ExternalPaymentRequest", FormMethod.Get))
+        {
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Add External Request</button>
+            </div>
+        }
+
+    </div>
+
+    <div id="unconfirmedpayments" class="tab-pane fade">
+        @if (Model.MyUnconfirmedPayments != null && Model.MyUnconfirmedPayments.Count() > 0)
+        {
+
+            <h1>My Unconfirmed Payments</h1>
+            <table class="table table-striped">
+                <tr>
+                    <th>Paid to</th>
+                    <th>Amount</th>
+                    <th>Paid for</th>
+                    <td>Date</td>
+                    <th>Edit</th>
+                </tr>
+
+                @foreach (var unconfirmedPayment in Model.MyUnconfirmedPayments)
+                {
+                    <tr>
+                        <td>@unconfirmedPayment.PaymentMadeTo</td>
+                        <td>£@unconfirmedPayment.AmountPaid</td>
+                        <td>@unconfirmedPayment.PaymentRequestName</td>
+                        <td>@unconfirmedPayment.Created.ToShortDateString()</td>
+                        <td>
+                            @using (Html.BeginForm("Edit", "Payment", FormMethod.Get))
+                            {
+                                @Html.Hidden("paymentId", unconfirmedPayment.PaymentId)
+                                <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button>
+                            }
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        }
+        else
+        {
+            <span class="noDataSpan">You don't have any unconfirmed payments</span>
+        }
+
+    </div>
+
 </div>
 
-<h1>Money I owe</h1>
-@if (Model.RequestsSentToMeAndUnpaid != null && Model.RequestsSentToMeAndUnpaid.Count() > 0)
-{
-    <table class="table table-striped">
-        <tr>
-            <th>Owed For</th>
-            <th>Amount left to pay</th>
-            <th>Owed to</th>
-            <th>Date Sent</th>
-            <th>Pay</th>
-        </tr>
-        @foreach (var paymentRequest in Model.RequestsSentToMeAndUnpaid)
-        {
-            <tr class="@("preq" + paymentRequest.RequestFrom) preqRow">
-                <td>@paymentRequest.RequestName</td>
-                <td>£@paymentRequest.AmountLeftToPay</td>
-                <td>@paymentRequest.RequestFrom</td>
-                <td>@paymentRequest.Created.ToShortDateString()</td>
-                <td>
-                    @using (Html.BeginForm("New", "Payment", FormMethod.Post))
-                    {
-                        @Html.Hidden("requestId", paymentRequest.PaymentRequestId)
-                        <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon glyphicon-transfer"></i></button>
-                    }
-                </td>
-                <td class="hidden paymentRequestIds">@paymentRequest.PaymentRequestId</td>
-            </tr>
-        }
-        <tr>
-            <td>Total:</td>
-            <td class="total">£@Model.RequestsSentToMeAndUnpaid.Sum(p => p.AmountLeftToPay)</td>
-            @foreach (var user in Model.UserNames)
-            {
-                <td class="@("preq" + user.Value) usertotal hidden">
-                    £@Model.RequestsSentToMeAndUnpaid.Where(p => p.RequestFrom.Equals(user.Value)).Sum(p => p.AmountLeftToPay)
-                </td>
-            }
-            <td></td>
-            <td></td>
-            <td>
-                <button onclick="payAll()" class="btn btn-success">Pay all</button>
-            </td>
-        </tr>
-    </table>
-}
-else
-{
-    <span>You have no overdue payments</span>
-}
 
 
-<h1>Money I'm owed</h1>
-@if (Model.MyUnresolvedRequests != null && Model.MyUnresolvedRequests.Count() > 0)
-{
-    <table class="table table-striped">
-        <tr>
-            <th>Owed for</th>
-            <th>Amount left to pay</th>
-            <th>Request made to</th>
-            <th>Created</th>
-            <th>Edit</th>
-        </tr>
-        @foreach (var paymentRequest in Model.MyUnresolvedRequests)
-        {
-            <tr class="@("preq" + paymentRequest.RequestMadeTo) preqRow">
-                <td>@paymentRequest.RequestName</td>
-                <td>£@paymentRequest.AmountLeftToPay</td>
-                <td>@paymentRequest.RequestMadeTo</td>
-                <td>@paymentRequest.Created.ToShortDateString()</td>
-                <td>
-                    @using (Html.BeginForm("Edit", "PaymentRequest", FormMethod.Get))
-                    {
-                        @Html.Hidden("paymentRequestId", paymentRequest.PaymentRequestId)
-                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button>
-                    }
-                </td>
-
-            </tr>
-        }
-        <tr>
-            <td>Total:</td>
-            <td class="total">£@Model.MyUnresolvedRequests.Sum(p => p.AmountLeftToPay)</td>
-            @foreach (var user in Model.UserNames)
-            {
-                <td class="@("preq" + user.Value) usertotal hidden">
-                    £@Model.MyUnresolvedRequests.Where(p => p.RequestMadeTo.Equals(user.Value)).Sum(p => p.AmountLeftToPay)
-                </td>
-            }
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-    </table>
-}
-else
-{
-    <span>You don't have any outstanding requests</span>
-}
-@using (Html.BeginForm("Create", "PaymentRequest", FormMethod.Get))
-{
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Add Request</button>
-    </div>
-}
-
-    @if (Model.MyUnconfirmedPayments != null && Model.MyUnconfirmedPayments.Count() > 0)
-    {
-
-<hr>
-        <h1>My Unconfirmed Payments</h1>
-    <table class="table table-striped">
-        <tr>
-            <th>Paid to</th>
-            <th>Amount</th>
-            <th>Paid for</th>
-            <td>Date</td>
-            <th>Edit</th>
-        </tr>
-
-        @foreach (var unconfirmedPayment in Model.MyUnconfirmedPayments)
-        {
-            <tr>
-                <td>@unconfirmedPayment.PaymentMadeTo</td>
-                <td>£@unconfirmedPayment.AmountPaid</td>
-                <td>@unconfirmedPayment.PaymentRequestName</td>
-                <td>@unconfirmedPayment.Created.ToShortDateString()</td>
-                <td>
-                    @using (Html.BeginForm("Edit", "Payment", FormMethod.Get))
-                    {
-                        @Html.Hidden("paymentId", unconfirmedPayment.PaymentId)
-                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button>
-                    }
-                </td>
-            </tr>
-        }
-
-    </table>
-    }
     
-@if (Model.ExternalPaymentRequests != null && Model.ExternalPaymentRequests.Count() > 0)
-{
-    <hr>
-    <h1>Outstanding External Payments</h1>
-    <table class="table table-striped">
-        <tr>
-            <th>For</th>
-            <th>Amount</th>
-            <th>To</th>
-            <th>Created</th>
-            <th>Edit</th>
-        </tr>
-        @foreach (var externalPaymentRequest in Model.ExternalPaymentRequests)
-        {
-        <tr>
-            <td>@externalPaymentRequest.Name</td>
-            <td>£@externalPaymentRequest.Amount</td>
-            <td>@externalPaymentRequest.RequestTo</td>
-            <td>@externalPaymentRequest.Created.ToShortDateString()</td>
-            <td>
-                @using (Html.BeginForm("Edit", "ExternalPaymentRequest", FormMethod.Get))
-                {
-                    @Html.Hidden("paymentRequestId", externalPaymentRequest.ExternalPaymentRequestId)
-                    <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button>
-                }
-            </td>
-        </tr>
-        }
-        <tr>
-            <td>Total</td>
-            <td>£@Model.ExternalPaymentRequests.Sum(r => r.Amount)</td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-    </table>
-}
+
 
 <script>
 
