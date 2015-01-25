@@ -29,6 +29,7 @@
                         <li>@Html.ActionLink("My Dashboard", "MyDashboard", "Home")</li>
                         <li>@Html.ActionLink("New Request", "Create", "PaymentRequest")</li>
                         <li>@Html.ActionLink("New External Request", "Create", "ExternalPaymentRequest")</li>
+                        <li>@Html.ActionLink("My History", "Index", "History")</li>
                         <li>@Html.ActionLink("Change Password", "ChangePassword", "User")</li>
                         <li>@Html.ActionLink("Logout", "Logout", "Home")</li>
                         @if (((HouseOwage.Models.User)Session[HouseOwage.Controllers.HomeController.UserSession]).Admin)

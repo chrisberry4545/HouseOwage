@@ -1,0 +1,63 @@
+﻿@model HouseOwage.ViewModels.MyHistoryViewModel
+@{
+    ViewBag.Title = "History";
+}
+
+<div class="row">
+    <h1>History</h1>
+</div>
+
+
+<div class="row">
+    <h2>My Honoured Requests</h2>
+
+    @if (Model.MyHonouredRequests != null && Model.MyHonouredRequests.Count() > 0)
+    {
+        <table class="table table-striped">
+            <tr>
+                <th>Request</th>
+                <th>Amount</th>
+                <th>Made To</th>
+                <th>Date</th>
+            </tr>
+            @foreach (var request in Model.MyHonouredRequests)
+            {
+                <tr>
+                    <td>@request.RequestName</td>
+                    <td>£@request.AmountLeftToPay</td>
+                    <td>@request.RequestMadeTo</td>
+                    <td>@request.Created</td>
+                </tr>
+            }
+        </table>
+    }
+</div>
+
+
+<div class="row">
+    <h2>My Confirmed Payments</h2>
+
+    @if (Model.MyConfirmedPayments != null && Model.MyConfirmedPayments.Count() > 0)
+    {
+        <table class="table table-striped">
+            <tr>
+                <th>Request</th>
+                <th>Amount</th>
+                <th>Made To</th>
+                <th>Date</th>
+            </tr>
+
+            @foreach (var payment in Model.MyConfirmedPayments)
+            {
+                <tr>
+                    <td>@payment.PaymentRequestName</td>
+                    <td>£@payment.AmountPaid</td>
+                    <td>@payment.PaymentMadeTo</td>
+                    <td>@payment.Created</td>
+                </tr>
+            }
+
+        </table>
+    }
+
+</div>
