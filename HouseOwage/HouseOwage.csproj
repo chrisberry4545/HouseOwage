@@ -161,6 +161,7 @@
     <Compile Include="Models\PaymentRequest.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\CreatePaymentRequestViewModel.cs" />
     <Compile Include="ViewModels\MyDashboardViewModel.cs" />
     <Compile Include="ViewModels\PaymentRequestViewModel.cs" />
     <Compile Include="ViewModels\PaymentViewModel.cs" />
@@ -216,7 +217,7 @@
     <Content Include="Views\Home\MyDashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\PaymentRequest\Create.cshtml" />
+    <Content Include="Views\PaymentRequest\CreateOriginal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Payment\Create.cshtml" />
@@ -261,6 +262,7 @@
     <Content Include="Views\User\Create.cshtml" />
     <Content Include="Views\PaymentRequest\Edit.cshtml" />
     <Content Include="Views\Payment\Edit.cshtml" />
+    <Content Include="Views\PaymentRequest\Create.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

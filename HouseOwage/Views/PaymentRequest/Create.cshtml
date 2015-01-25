@@ -1,4 +1,4 @@
-﻿@model HouseOwage.Models.PaymentRequest
+﻿@model HouseOwage.ViewModels.CreatePaymentRequestViewModel
 @{
     ViewBag.Title = "Create Request";
     ViewBag.InputClass = "form-control";
@@ -16,19 +16,31 @@
 
 
         <div class="form-group">
-            @Html.LabelFor(m => m.Name)
-            @Html.TextBoxFor(m => m.Name, new { @class = ViewBag.InputClass, placeholder = "What is the request for?" })
+            @Html.LabelFor(m => m.PaymentRequest.Name)
+            @Html.TextBoxFor(m => m.PaymentRequest.Name, new { @class = ViewBag.InputClass, placeholder = "What is the request for?" })
         </div>
 
         <div class="form-group">
-            @Html.DisplayNameFor(m => m.Amount)
-            @Html.TextBoxFor(m => m.Amount, new { @class = ViewBag.InputClass, type = "number", step = "any" })
-            @Html.ValidationMessageFor(m => m.Amount)
+            @Html.DisplayNameFor(m => m.PaymentRequest.Amount)
+            @Html.TextBoxFor(m => m.PaymentRequest.Amount, new { @class = ViewBag.InputClass, type = "number", step = "any" })
+            @Html.ValidationMessageFor(m => m.PaymentRequest.Amount)
         </div>
 
         <div class="form-group">
-            @Html.DisplayNameFor(m => m.SentTo)
-            @Html.DropDownListFor(m => m.SentTo.UserId, (IEnumerable<SelectListItem>)ViewBag.AllUsers, new { @class = ViewBag.InputClass })
+            @Html.DisplayNameFor(m => m.PaymentRequest.SentTo)
+            @Html.DropDownListFor(m => m.UsersToSentTo[0], (IEnumerable<SelectListItem>)ViewBag.AllUsers, new { @class = ViewBag.InputClass })
+        </div>
+        
+        for(int i = 1; i < Model.UsersToSentTo.Count; i++)
+        {
+            <div class="form-group hidden user">
+                @Html.DisplayNameFor(m => m.PaymentRequest.SentTo)
+                @Html.DropDownListFor(m => m.UsersToSentTo[i], (IEnumerable<SelectListItem>)ViewBag.AllUsersWithBlank, new { @class = ViewBag.InputClass })
+            </div>
+        }
+        
+        <div class="form-group">
+            <button style="float:right;" onclick="addUser()" type="button" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Add User</button>
         </div>
 
         <div class="form-group">
@@ -38,3 +50,12 @@
     }
 
 </div>
+
+<script>
+    function addUser() {
+        var userInputs = $('.hidden.user');
+        if (userInputs.length > 0) {
+            $(userInputs[0]).removeClass('hidden');
+        }
+    }
+</script>

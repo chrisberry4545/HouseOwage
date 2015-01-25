@@ -1,5 +1,6 @@
 ﻿using HouseOwage.Context;
 using HouseOwage.Models;
+using HouseOwage.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -11,6 +12,7 @@ namespace HouseOwage.Controllers
 {
     public class PaymentRequestController : Controller
     {
+
         //
         // Get: PaymentRequest/Create/
         [HttpGet]
@@ -19,35 +21,58 @@ namespace HouseOwage.Controllers
             if (Session[HomeController.UserSession] != null)
             {
                 PaymentRequest paymentRequest = new PaymentRequest();
-
+                CreatePaymentRequestViewModel vm = new CreatePaymentRequestViewModel();
+                vm.PaymentRequest = paymentRequest;
                 SetUpViewBag();
 
-                return View("Create", paymentRequest);
+                var allUsers = (IEnumerable<SelectListItem>)ViewBag.AllUsers;
+                vm.UsersToSentTo = new List<int>();
+                for (int i = 0; i < allUsers.Count(); i++)
+                {
+                    vm.UsersToSentTo.Add(-1);
+                }
+
+                return View("Create", vm);
             }
             return RedirectToAction("Index", "Home");
         }
-
         //
         // Post: PaymentRequest/Create/
         [HttpPost]
-        public ActionResult Create(PaymentRequest paymentRequest)
+        public ActionResult Create(CreatePaymentRequestViewModel createPaymentRequestVM)
         {
             User user = (User)Session[HomeController.UserSession];
-            if (ModelState.IsValid)
+            if (user != null && ModelState.IsValid)
             {
                 using (var db = new HouseOwageContext())
                 {
-                    paymentRequest.CreatedBy = db.Users.FirstOrDefault(u => user.UserId == u.UserId);
-                    paymentRequest.SentTo = db.Users.FirstOrDefault(u => u.UserId == paymentRequest.SentTo.UserId);
-                    paymentRequest.Created = DateTime.Now;
-                    db.PaymentRequests.Add(paymentRequest);
+                    foreach (var userId in createPaymentRequestVM.UsersToSentTo)
+                    {
+                        if (userId != -1)
+                        {
+                            var createdBy = db.Users.FirstOrDefault(u => user.UserId == u.UserId);
+                            if (createdBy != null)
+                            {
+                                PaymentRequest paymentRequest = new PaymentRequest()
+                                {
+                                    Amount = createPaymentRequestVM.PaymentRequest.Amount,
+                                    Created = DateTime.Now,
+                                    CreatedBy = createdBy,
+                                    SentTo_UserId = userId,
+                                    Name = createPaymentRequestVM.PaymentRequest.Name
+                                };
+                                db.PaymentRequests.Add(paymentRequest);
+                            }
+                        }
+                    }
                     db.SaveChanges();
+                    return RedirectToAction("MyDashboard", "Home");
                 }
-                return RedirectToAction("MyDashboard", "Home");
             }
             SetUpViewBag();
-            return View("Create", paymentRequest);
+            return View("Create", createPaymentRequestVM);
         }
+
 
         [HttpGet]
         public ActionResult Edit(int paymentRequestId)
@@ -109,6 +134,10 @@ namespace HouseOwage.Controllers
             if (user != null)
             {
                 ViewBag.AllUsers = allUsers.Where(u => u.Text != user.Name); //Current user shouldn't be avaliable
+                var allUsersWithBlank = new List<SelectListItem>();
+                allUsersWithBlank.Add(new SelectListItem { Value = "-1", Text = "None"});
+                allUsersWithBlank.AddRange(ViewBag.AllUsers);
+                ViewBag.AllUsersWithBlank = allUsersWithBlank;
             }
         }
 
